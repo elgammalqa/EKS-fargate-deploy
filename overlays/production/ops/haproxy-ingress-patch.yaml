@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    eks.amazonaws.com/fargate-profile: fp-default
+  name: haproxy-ingress
+  namespace: jitsi
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt"  
+spec:
+  tls:
+  - hosts:
+    - edulane.info
+    secretName: jitsi-messenger-schule-tls-ha
+  rules:
+    - host: edulane.info
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: haproxy
+            servicePort: 80
